@@ -1,0 +1,11 @@
+{
+  "schedule": [
+      {
+          "id": 1,
+          "name": "Paulo",
+          "date": "12/07/2023",
+          "time": "12:00",
+          "barber": "Paulo"
+      }
+  ]
+}

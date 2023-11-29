@@ -1,4 +1,8 @@
 import { useState } from "react"
+import imgTime from "./assets/relogio 1.png"
+import imgCut from "./assets/ferramenta-de-corte-de-cabelo 1.png"
+import imgCalendar from "./assets/calendario.png"
+import imgClient from "./assets/clientes 2.png"
 
 export default function App() {
 
@@ -6,6 +10,7 @@ export default function App() {
   const [date, setDate] = useState("")
   const [time, setTime] = useState("")
   const [barber, setBarber] = useState("")
+  const [schedule, setSchedule] = useState([])
 
   const handleName = (ev)=>{
     const newName = ev.target.value
@@ -24,7 +29,6 @@ export default function App() {
     setBarber(newBarber)
   }
 
-
   return(
     <>
       <div style={{
@@ -32,11 +36,32 @@ export default function App() {
         flexDirection: "column",
         alignItems: "center",
         backgroundColor: "#D9D9D9",
-        height: "100vh"
+        height: "100vh",
       }}>
-        <form style={{
+        <form
+        onSubmit={(ev)=>{
+          ev.preventDefault()
+          if (!name || !date || !barber || !time) {
+            alert("Agendamento Inválido")
+          } else {
+            const info = {
+              name,
+              date, 
+              time,
+              barber
+            }
+            setSchedule(()=> [...schedule, info])
+            setName("")
+            setDate("")
+            setBarber("")
+            setTime("")
+          }
+        }}
+        style={{
         display: "flex",
         flexDirection: "column",
+        gap: "6px",
+        alignItems: "center"
         }}>
           <input
           type="text" 
@@ -83,7 +108,7 @@ export default function App() {
         }}>
             <option 
             value=""
-            selected="selected">...
+            defaultValue="selected">...
             </option>
             <option 
             value="Kennedy">Kennedy
@@ -97,6 +122,13 @@ export default function App() {
           </select>
           <button 
           id="save"
+          style={{
+            width: "120px",
+            padding: "4px",
+            borderRadius: "4px",
+            border: "none",
+            cursor: "pointer"
+          }}
           >
           Salvar
           </button>
@@ -112,11 +144,67 @@ export default function App() {
           marginBottom: "20px",
           flexWrap: "wrap",
           display: "flex",
-          gap: "12px"
+          gap: "12px",
+          justifyContent: "center"
         }}>
-
+          {schedule.map((item, i)=>{
+            return(
+              <div
+              style={{
+                height: "120px",
+                backgroundColor: "#D9D9D9",
+                padding: "8px",
+                borderRadius: "4px",
+                display: "flex",
+                alignItems: "center",
+              }} 
+              key={i}>
+                <ul style={{
+                  listStyle: "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "4px"
+                }}>
+                  <li style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px"
+                  }}>
+                    <img src={imgClient} alt="imgClient" />
+                    {item.name}
+                  </li>
+                  <li style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px"
+                  }}>
+                    <img src={imgCut} alt="imgCut" />
+                    {item.barber}
+                  </li>
+                  <li style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px"
+                  }}>
+                    <img style={{width: "14px0", height: "13px"}} src={imgCalendar} alt="imgCalendar" />
+                    {item.date}
+                    </li>
+                  <li style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px"
+                  }}>
+                    <img src={imgTime} alt="imgTime"/>
+                    {item.time}
+                    </li>
+                </ul>
+              </div>
+            )
+            })}
         </div>
       </div>
     </>
   )
 }
+
+//Aplicar expressão regular nos inputs de time e data. Estilizar os inputs. Refatorar

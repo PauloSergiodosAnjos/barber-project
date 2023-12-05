@@ -1,11 +1,18 @@
 {
   "schedule": [
-      {
-          "id": 1,
-          "name": "Paulo",
-          "date": "12/07/2023",
-          "time": "12:00",
-          "barber": "Paulo"
-      }
+    {
+      "id": 1,
+      "name": "Paulo",
+      "date": "12/07/2023",
+      "time": "12:00",
+      "barber": "Paulo"
+    },
+    {
+      "name": "Paulo Sérgio",
+      "date": "21/07",
+      "time": "12:00",
+      "barber": "Wender",
+      "id": 2
+    }
   ]
 }

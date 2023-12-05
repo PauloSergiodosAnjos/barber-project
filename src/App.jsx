@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import imgTime from "./assets/relogio 1.png"
 import imgCut from "./assets/ferramenta-de-corte-de-cabelo 1.png"
 import imgCalendar from "./assets/calendario.png"
@@ -11,6 +11,21 @@ export default function App() {
   const [time, setTime] = useState("")
   const [barber, setBarber] = useState("")
   const [schedule, setSchedule] = useState([])
+
+  useEffect(()=>{
+    getSchedule()
+  }, [])
+
+  const getSchedule = async ()=> {
+    try {
+      const url = "http://localhost:3000/schedule"
+      const response = await fetch(url)
+      const dataSchedule = await response.json()
+      setSchedule(dataSchedule)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleName = (ev)=>{
     const newName = ev.target.value
@@ -29,6 +44,16 @@ export default function App() {
     setBarber(newBarber)
   }
 
+  const postSchedule = async (info)=> {
+    const response = await fetch("http://localhost:3000/schedule", {
+      method: "POST",
+      headers: {
+          "content-type": "application/json"
+      },
+      body: JSON.stringify(info)
+    })
+  }
+
   return(
     <>
       <div style={{
@@ -44,6 +69,18 @@ export default function App() {
           if (!name || !date || !barber || !time) {
             alert("Agendamento Inválido")
           } else {
+            const regexData = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])$/;
+            const regexTime = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+            if (!regexData.test(date)) {
+              alert("Formato de data inválido. Use DD/MM.");
+              return;
+            }
+  
+            if (!regexTime.test(time)) {
+              alert("Formato de horário inválido. Use HH:MM.");
+              return;
+            }
+
             const info = {
               name,
               date, 
@@ -55,6 +92,7 @@ export default function App() {
             setDate("")
             setBarber("")
             setTime("")
+            postSchedule(info)
           }
         }}
         style={{

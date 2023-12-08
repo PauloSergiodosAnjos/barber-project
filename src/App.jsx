@@ -3,6 +3,8 @@ import imgTime from "./assets/relogio 1.png"
 import imgCut from "./assets/ferramenta-de-corte-de-cabelo 1.png"
 import imgCalendar from "./assets/calendario.png"
 import imgClient from "./assets/clientes 2.png"
+import imgTrash from "./assets/lixo.png"
+import imgEdit from "./assets/editar.png"
 
 export default function App() {
 
@@ -52,6 +54,18 @@ export default function App() {
       },
       body: JSON.stringify(info)
     })
+    const savedSchedule = await response.json()
+    return savedSchedule
+  }
+
+  const deleteSchedule = async (id)=> {
+    const response = await fetch(`http://localhost:3000/schedule/${id}`, {
+      method: "DELETE",
+    })
+    const deletedSchedule = await response.json()
+    //usado para não renderizar os elementos apagados ded acordo com o id
+    setSchedule((newSchedule)=> newSchedule.filter((item)=> item.id !== id))
+    return deletedSchedule
   }
 
   return(
@@ -64,7 +78,7 @@ export default function App() {
         height: "100vh",
       }}>
         <form
-        onSubmit={(ev)=>{
+        onSubmit={async (ev)=>{
           ev.preventDefault()
           if (!name || !date || !barber || !time) {
             alert("Agendamento Inválido")
@@ -92,7 +106,9 @@ export default function App() {
             setDate("")
             setBarber("")
             setTime("")
-            postSchedule(info)
+            await postSchedule(info)
+            //atualiza o estado da schedule
+            getSchedule()
           }
         }}
         style={{
@@ -235,6 +251,34 @@ export default function App() {
                     <img src={imgTime} alt="imgTime"/>
                     {item.time}
                     </li>
+                    {item.id && 
+                    <div style={{
+                      display: "flex",
+                      listStyle: "none",
+                      justifyContent: "center",
+                      gap: "25px"
+                    }}>
+                      <button
+                        onClick={()=> deleteSchedule(item.id)}
+                      >
+                        <img 
+                        src={imgTrash} alt="lixo"
+                        style={{
+                          width: "14px",
+                          cursor: "pointer"
+                        }}/>
+                      </button>
+                      <button>
+                      <img 
+                        src={imgEdit} alt="editar"
+                        style={{
+                          width: "14px",
+                          cursor: "pointer"
+                        }}/>
+                      </button>
+                    </div>
+                    
+                    }
                 </ul>
               </div>
             )

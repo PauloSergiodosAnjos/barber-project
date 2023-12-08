@@ -68,6 +68,18 @@ export default function App() {
     return deletedSchedule
   }
 
+  const editSchedule = async (data, id)=> {
+    const response = await fetch(`http://localhost:3000/schedule/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    const editedSchedule = await response.json()
+    return editedSchedule
+  }
+
   return(
     <>
       <div style={{
@@ -268,7 +280,15 @@ export default function App() {
                           cursor: "pointer"
                         }}/>
                       </button>
-                      <button>
+                      <button
+                      onClick={async ()=> {
+                        const editDate = prompt("Qual data dedseja?")
+                        const editTime = prompt("Qual horário deseja?")
+                        alert("Agendamento editado com sucesso!")
+                        await editSchedule({name: item.name, barber: item.barber, date: editDate, time: editTime}, item.id)
+                        getSchedule()
+                      }}
+                      >
                       <img 
                         src={imgEdit} alt="editar"
                         style={{
@@ -277,7 +297,6 @@ export default function App() {
                         }}/>
                       </button>
                     </div>
-                    
                     }
                 </ul>
               </div>

@@ -1,3 +1,9 @@
 # Project Barber
 
-## Projeto pessoal a fim de aprimorar meu uso com o React e aplicar meus estudos
+## Agendamento de cortes com Reactjs
+
+## funcionalidades
+
+- Adições de novos agendamentos
+- Possibilidade de edições nos agendamentos já salvos no server
+- Possibilidade de exclusão de agendamentos já salvos no server
